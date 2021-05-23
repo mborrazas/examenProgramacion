@@ -1,77 +1,80 @@
 <?php
+ 
+require 'datos.php';
 
-$nombre = $_POST['nombre'];
-$apellido = $_POST['apellido'];
-$edad = $_POST['edad'];
-$telefono = $_POST['telefono'];
-$email = $_POST['email'];
-$fechaNacimiento = $_POST['fechaNacimiento'];
-
-validarDatos($nombre, $apellido, $edad, $telefono, $email, $fechaNacimiento);
-
+validarDatos($_POST['nombre'], $_POST['apellido'], $_POST['edad'], $_POST['telefono'], $_POST['email'], $_POST['fechaNacimiento']);
 
 function validarDatos($nombre, $apellido, $edad, $telefono, $email, $fechaNacimiento)
 {
+    validarNombre($nombre);
+    validarApellido($apellido);
+    validarEdad($edad);
+    validarTelefono($telefono);
+    validarEmail($email);
+    validarFechaDeNacimiento($fechaNacimiento);
+    guardarDatos($nombre, $apellido, $edad, $telefono, $email, $fechaNacimiento);
+    return true;
+}
+
+function validarNombre($nombre)
+{
     if ($nombre === '') {
         echo 'El nombre esta vacio';
-        return false;
+        die;
     }
+}
+
+function validarApellido($apellido)
+{
     if ($apellido === '') {
         echo 'El apellido esta vacio';
-        return false;
+        die;
     }
-    if ($edad === '') {
-        echo 'La edad esta vacia';
-        return false;
-    }
+}
 
+function validarTelefono($telefono)
+{
     if ($telefono === '') {
         echo 'El teléfono esta vacio';
-        return false;
+        die;
     }
+    if (!is_numeric($telefono)) {
+        echo 'El teléfono debe ser un numero';
+        die;
+    }
+}
+
+function validarEdad($edad)
+{
+    if ($edad === '') {
+        echo 'La edad esta vacia';
+        die;
+    }
+    if (!is_numeric($edad)) {
+        echo 'La edad debe ser un numero.';
+        die;
+    }
+}
+
+function validarEmail($email)
+{
 
     if ($email === '') {
         echo 'El email esta vacio';
-        return false;
+        die;
     }
-
-    if ($fechaNacimiento === '') {
-        echo 'La fecha de nacimiento esta vacia';
-        return false;
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        echo "La dirección de email no es válida.";
+        die;
     }
-
-    if (!is_numeric($edad)) {
-        echo 'La edad debe ser un numero.';
-        return false;
-    }
-
-    if (!is_numeric($telefono)) {
-        echo 'El teléfono debe ser un numero';
-        return false;
-    }
-    guardarDatos($nombre, $apellido, $edad, $telefono, $email, $fechaNacimiento);
 }
 
 
-function guardarDatos($nombre, $apellido, $edad, $telefono, $email, $fechaNacimiento)
+function validarFechaDeNacimiento($fechaNacimiento)
 {
-    $conexion = new mysqli(
-        'localhost',
-        'usuario',
-        'password',
-        'nombre'
-    );
 
-    $sql = "INSERT INTO personas(nombre, apellido, edad, telefono, email, fechaNacimiento) VALUES(
-        '{$nombre}',
-        '{$apellido}',
-        {$edad},
-        '{$telefono},
-        '{$email},
-        '{$fechaNacimiento}
-        ');";
-    $conexion->query($sql);
-
-    echo 'Datos guardados.';
-    return true;
+    if ($fechaNacimiento === '') {
+        echo 'La fecha de nacimiento esta vacia';
+        die;
+    }
 }
