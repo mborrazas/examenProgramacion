@@ -1,4 +1,4 @@
-# examenProgramacion
+# Programación prueba.
 
 
 Formulario para agregar personas.
